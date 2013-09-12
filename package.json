@@ -18,7 +18,8 @@
     "grunt": "~0.4.1",
     "matchdep": "~0.1.2",
     "grunt-browserify": "~1.2.4",
-    "grunt-gh-pages": "~0.7.1"
+    "grunt-gh-pages": "~0.7.1",
+    "bower": "~1.2.6"
   },
   "dependencies": {
     "esprima": "~1.0.3",
