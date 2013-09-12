@@ -38,7 +38,7 @@ module.exports = function (grunt) {
     browserify: {
       dist: {
         files: {
-          'build/codemirror-interactive-numbers.build.js': ['js/src/interactive-numbers.js']
+          'dist/codemirror-interactive-numbers.browser.js': ['js/src/interactive-numbers.js']
         }
       }
     },
