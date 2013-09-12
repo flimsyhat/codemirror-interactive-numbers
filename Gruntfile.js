@@ -35,6 +35,14 @@ module.exports = function (grunt) {
       }
     },
 
+    browserify: {
+      dist: {
+        files: {
+          'build/codemirror-interactive-numbers.build.js': ['js/src/interactive-numbers.js']
+        }
+      }
+    },
+
 		bower: {
 			options: {
 				exclude: ['underscore']
@@ -53,6 +61,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'coffee'
+    'coffee',
+    'browserify:dist'
   ]);
 };
