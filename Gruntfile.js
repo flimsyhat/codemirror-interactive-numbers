@@ -6,11 +6,10 @@ module.exports = function (grunt) {
 		clean: {
       dist: [
 				'js',
+				'dist'
       ],
 			test: [
-				'tmp',
-				'components',
-				'bower_components'
+				'tmp'
 			]
 		},
 
@@ -43,25 +42,23 @@ module.exports = function (grunt) {
       }
     },
 
-		bower: {
-			options: {
-				exclude: ['underscore']
-			},
-			standard: {
-				rjsConfig: 'tmp/config.js'
-			},
-			global: {
-				rjsConfig: 'tmp/global-config.js'
-			},
-			baseUrl: {
-				rjsConfig: 'tmp/baseurl-config.js'
-			}
-		}
+    'gh-pages': {
+      options: {
+        base: 'dist'
+      },
+      src: ['**']
+    }
+
 	});
 
   grunt.registerTask('build', [
     'clean:dist',
     'coffee',
     'browserify:dist'
+  ]);
+
+  grunt.registerTask('release', [
+    'build',
+    'gh-pages'
   ]);
 };
