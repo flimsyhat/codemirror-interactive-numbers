@@ -2,7 +2,11 @@
 
 Adds "scrubble" numbers to CodeMirror
 
-# Usage
+# Release
 
 The latest release can be found here: 
 [http://fullstackio.github.io/codemirror-interactive-numbers/codemirror-interactive-numbers.browser.js](http://fullstackio.github.io/codemirror-interactive-numbers/codemirror-interactive-numbers.browser.js)
+
+Or install with `bower`
+
+    bower info codemirror-interactive-numbers
