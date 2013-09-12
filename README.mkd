@@ -1,0 +1,8 @@
+# codemirror-interactive-numbers
+
+Adds "scrubble" numbers to CodeMirror
+
+# Usage
+
+The latest release can be found here: 
+[http://fullstackio.github.io/codemirror-interactive-numbers/codemirror-interactive-numbers.browser.js](http://fullstackio.github.io/codemirror-interactive-numbers/codemirror-interactive-numbers.browser.js)
