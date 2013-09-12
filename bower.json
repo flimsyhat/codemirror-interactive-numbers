@@ -1,0 +1,13 @@
+{
+  "name": "codemirror-interactive-numbers",
+  "version": "0.0.1",
+  "main": "dist/codemirror-interactive-numbers.browser.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
