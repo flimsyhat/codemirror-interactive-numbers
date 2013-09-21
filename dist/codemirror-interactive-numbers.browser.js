@@ -209,7 +209,7 @@ var global=self;(function() {
     });
   })();
 
-  alert("hi");
+  
 
 }).call(this);
 
