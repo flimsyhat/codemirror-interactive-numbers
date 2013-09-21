@@ -2,11 +2,10 @@
 var global=self;(function() {
   (function() {
     "use strict";
-    var $options, CodeMirror, Pos, attachInteractivity, deltaForNumber, editing, esprima, findLiterals, nextId, setInteractive;
+    var CodeMirror, Pos, attachInteractivity, deltaForNumber, editing, esprima, findLiterals, nextId, setInteractive;
     esprima = require("esprima");
     CodeMirror = global.CodeMirror;
     Pos = CodeMirror.Pos;
-    exports.interactiveOptions = $options = {};
     editing = false;
     setInteractive = function(cm, changeObj) {
       var clsName, currentText, e, editableWidget, end, hasReloaded, key, mark, marks, newTree, pos, range, scrubbableLinks, start, syntax, toRun, val, widgets, _i, _len;
@@ -28,7 +27,7 @@ var global=self;(function() {
             range: true
           }));
           widgets = [];
-          $options.values = syntax.values;
+          cm.options.interactive.values = syntax.values;
           for (key in syntax.values) {
             val = syntax.values[key];
             start = val.start;
@@ -118,7 +117,7 @@ var global=self;(function() {
           newNumberLength = d.toString().length;
           lengthDiff = newNumberLength - origNumberLength;
           ele.textContent = d;
-          $options.values[ele.id].value = d;
+          cm.options.interactive.values[ele.id].value = d;
           line = cm.getLine(val.start.line);
           startOfString = line.substr(0, val.start.ch);
           endOfString = line.substr(val.end.ch, line.length);
@@ -133,8 +132,8 @@ var global=self;(function() {
           cm.replaceRange(newString, Pos(val.start.line, 0), Pos(val.start.line, endPos));
           val.start = Pos(val.start.line, startOfString.length);
           val.end = Pos(val.start.line, (startOfString + String(d)).length);
-          if ($options.onChange) {
-            return $options.onChange($options.values);
+          if (cm.options.interactive.onChange) {
+            return cm.options.interactive.onChange(cm.options.interactive.values);
           }
         };
         window.addEventListener("mousemove", moved);
@@ -203,12 +202,14 @@ var global=self;(function() {
       var prev;
       prev = old && old !== CodeMirror.Init;
       if (val) {
-        $options = val;
+        cm.options.interactive = val;
         cm.on("change", setInteractive);
         return setInteractive(cm);
       }
     });
   })();
+
+  alert("hi");
 
 }).call(this);
 
@@ -1183,19 +1184,19 @@ parseStatement: true, parseSourceElement: true */
         while (index < length) {
             ch = source[index++];
             str += ch;
-            if (classMarker) {
+            if (ch === '\\') {
+                ch = source[index++];
+                // ECMA-262 7.8.5
+                if (isLineTerminator(ch)) {
+                    throwError({}, Messages.UnterminatedRegExp);
+                }
+                str += ch;
+            } else if (classMarker) {
                 if (ch === ']') {
                     classMarker = false;
                 }
             } else {
-                if (ch === '\\') {
-                    ch = source[index++];
-                    // ECMA-262 7.8.5
-                    if (isLineTerminator(ch)) {
-                        throwError({}, Messages.UnterminatedRegExp);
-                    }
-                    str += ch;
-                } else if (ch === '/') {
+                if (ch === '/') {
                     terminated = true;
                     break;
                 } else if (ch === '[') {
@@ -1927,9 +1928,8 @@ parseStatement: true, parseSourceElement: true */
             if (strict && expr.type === Syntax.Identifier && isRestrictedWord(expr.name)) {
                 throwErrorTolerant({}, Messages.StrictLHSPostfix);
             }
-
             if (!isLeftHandSide(expr)) {
-                throwError({}, Messages.InvalidLHSInAssignment);
+                throwErrorTolerant({}, Messages.InvalidLHSInAssignment);
             }
 
             expr = {
@@ -1962,7 +1962,7 @@ parseStatement: true, parseSourceElement: true */
             }
 
             if (!isLeftHandSide(expr)) {
-                throwError({}, Messages.InvalidLHSInAssignment);
+                throwErrorTolerant({}, Messages.InvalidLHSInAssignment);
             }
 
             expr = {
@@ -2211,7 +2211,7 @@ parseStatement: true, parseSourceElement: true */
         if (matchAssign()) {
             // LeftHandSideExpression
             if (!isLeftHandSide(expr)) {
-                throwError({}, Messages.InvalidLHSInAssignment);
+                throwErrorTolerant({}, Messages.InvalidLHSInAssignment);
             }
 
             // 11.13.1
@@ -2529,7 +2529,7 @@ parseStatement: true, parseSourceElement: true */
                 if (matchKeyword('in')) {
                     // LeftHandSideExpression
                     if (!isLeftHandSide(init)) {
-                        throwError({}, Messages.InvalidLHSInForIn);
+                        throwErrorTolerant({}, Messages.InvalidLHSInForIn);
                     }
 
                     lex();
@@ -2808,15 +2808,16 @@ parseStatement: true, parseSourceElement: true */
 
         expect('{');
 
+        cases = [];
+
         if (match('}')) {
             lex();
             return {
                 type: Syntax.SwitchStatement,
-                discriminant: discriminant
+                discriminant: discriminant,
+                cases: cases
             };
         }
-
-        cases = [];
 
         oldInSwitch = state.inSwitch;
         state.inSwitch = true;
@@ -4094,7 +4095,7 @@ parseStatement: true, parseSourceElement: true */
     }
 
     // Sync with package.json.
-    exports.version = '1.0.3';
+    exports.version = '1.0.4';
 
     exports.parse = parse;
 
