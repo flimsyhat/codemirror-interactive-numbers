@@ -3,7 +3,7 @@
   esprima = require("esprima")
   CodeMirror = global.CodeMirror #|| require('code-mirror')
   Pos = CodeMirror.Pos
-  exports.interactiveOptions = $options = {}
+  # exports.interactiveOptions = cm.options.interactive = {}
   editing = false
 
   setInteractive = (cm, changeObj) ->
@@ -24,7 +24,7 @@
           range: true
         ))
         widgets = []
-        $options.values = syntax.values
+        cm.options.interactive.values = syntax.values
         for key of syntax.values
           val = syntax.values[key]
           start = val.start
@@ -45,7 +45,7 @@
       catch e
         console.log e
 
-      # $options.values = exports.interactiveOptions.values
+      # cm.options.interactive.values = exports.interactiveOptions.values
       editing = false
 
   deltaForNumber = (n) ->
@@ -107,7 +107,7 @@
         lengthDiff = newNumberLength - origNumberLength
 
         ele.textContent = d
-        $options.values[ele.id].value = d
+        cm.options.interactive.values[ele.id].value = d
         line = cm.getLine(val.start.line)
 
         startOfString = line.substr(0, val.start.ch)
@@ -127,8 +127,8 @@
         val.end = Pos(val.start.line, (startOfString + String(d)).length)
 
 
-        if $options.onChange
-          $options.onChange($options.values)
+        if cm.options.interactive.onChange
+          cm.options.interactive.onChange(cm.options.interactive.values)
 
 
       window.addEventListener "mousemove", moved
@@ -189,8 +189,11 @@
   global.CodeMirror.defineOption "interactiveNumbers", {}, (cm, val, old) ->
     prev = old and old isnt CodeMirror.Init
     if val
-      $options = val
+      # cm.options.interactive = val
+      cm.options.interactive = val
       cm.on "change", setInteractive
       setInteractive cm
 
 )()
+
+alert "hi"
