@@ -1,6 +1,6 @@
 {
   "name": "codemirror-interactive-numbers",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "dist/codemirror-interactive-numbers.browser.js",
   "ignore": [
     "**/.*",
